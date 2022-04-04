@@ -1,0 +1,9 @@
+[package]
+name = "uob-y1s2-toc-a2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "3", features = ["derive"] }
+log = "0.4"
+env_logger = "0.9"
