@@ -46,6 +46,9 @@
 #![warn(clippy::wildcard_imports)]
 #![warn(clippy::zero_sized_map_values)]
 
+mod m1;
+mod m2;
+mod m3;
 mod machine;
 mod tape;
 
@@ -54,75 +57,75 @@ use tape::{TapeConstructor, TapeValue};
 
 use clap::{AppSettings, Parser, Subcommand};
 
-#[derive(Parser)]
-#[clap(author, version, about, long_about = None)]
-#[clap(global_setting(AppSettings::PropagateVersion))]
-struct Cli {
-    #[clap(subcommand)]
-    command: Commands,
-}
+// #[derive(Parser)]
+// #[clap(author, version, about, long_about = None)]
+// #[clap(global_setting(AppSettings::PropagateVersion))]
+// struct Cli {
+//     #[clap(subcommand)]
+//     command: Commands,
+// }
 
-#[derive(Subcommand)]
-enum Commands {
-    /// Run with specific values of n and m
-    Run {
-        /// n
-        #[clap(short)]
-        n: u64,
+// #[derive(Subcommand)]
+// enum Commands {
+//     /// Run with specific values of n and m
+//     Run {
+//         /// n
+//         #[clap(short)]
+//         n: u64,
 
-        /// m
-        #[clap(short)]
-        m: u64,
-    },
-}
+//         /// m
+//         #[clap(short)]
+//         m: u64,
+//     },
+// }
 
-fn n_m_steps(n: u64, m: u64) -> u64 {
-    if n <= m {
-        n * 6 + 7
-    } else if n > m {
-        n * 2 + m * 4 + 7
-    } else {
-        unreachable!()
-    }
-}
+// fn n_m_steps(n: u64, m: u64) -> u64 {
+//     if n <= m {
+//         n * 6 + 7
+//     } else if n > m {
+//         n * 2 + m * 4 + 7
+//     } else {
+//         unreachable!()
+//     }
+// }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
 
-    #[test]
-    fn main() {
-        for n in 1..101 {
-            for m in 1..101 {
-                let mut main_tape = vec![TapeConstructor::Head(TapeValue::Value(MainValue::Hash))];
-                for _ in 0..n {
-                    main_tape.push(TapeConstructor::Value(TapeValue::Value(MainValue::A)));
-                }
-                main_tape.push(TapeConstructor::Value(TapeValue::Value(MainValue::Hash)));
+//     #[test]
+//     fn main() {
+//         for n in 1..101 {
+//             for m in 1..101 {
+//                 let mut main_tape = vec![TapeConstructor::Head(TapeValue::Value(MainValue::Hash))];
+//                 for _ in 0..n {
+//                     main_tape.push(TapeConstructor::Value(TapeValue::Value(MainValue::A)));
+//                 }
+//                 main_tape.push(TapeConstructor::Value(TapeValue::Value(MainValue::Hash)));
 
-                let mut aux_tape = vec![TapeConstructor::Head(TapeValue::Empty)];
-                for _ in 0..m {
-                    aux_tape.push(TapeConstructor::Value(TapeValue::Value(AuxValue::A)));
-                }
-                aux_tape.push(TapeConstructor::Value(TapeValue::Empty));
+//                 let mut aux_tape = vec![TapeConstructor::Head(TapeValue::Empty)];
+//                 for _ in 0..m {
+//                     aux_tape.push(TapeConstructor::Value(TapeValue::Value(AuxValue::A)));
+//                 }
+//                 aux_tape.push(TapeConstructor::Value(TapeValue::Empty));
 
-                let mut machine = TuringMachine::new(main_tape, aux_tape);
+//                 let mut machine = TuringMachine::new(main_tape, aux_tape);
 
-                let _ = machine.run();
-                let steps = n_m_steps(n, m);
-                assert_eq!(
-                    machine.steps_ran(),
-                    steps,
-                    "n={}, m={}, Actual steps: {}, Predicted steps: {}",
-                    n,
-                    m,
-                    machine.steps_ran(),
-                    steps
-                );
-            }
-        }
-    }
-}
+//                 let _ = machine.run();
+//                 let steps = n_m_steps(n, m);
+//                 assert_eq!(
+//                     machine.steps_ran(),
+//                     steps,
+//                     "n={}, m={}, Actual steps: {}, Predicted steps: {}",
+//                     n,
+//                     m,
+//                     machine.steps_ran(),
+//                     steps
+//                 );
+//             }
+//         }
+//     }
+// }
 
 fn main() {
     // let mut machine = TuringMachine::new(
@@ -144,29 +147,29 @@ fn main() {
 
     env_logger::init();
 
-    let cli = Cli::parse();
+    // let cli = Cli::parse();
 
-    match cli.command {
-        Commands::Run { n, m } => {
-            let mut main_tape = vec![TapeConstructor::Head(TapeValue::Value(MainValue::Hash))];
-            for _ in 0..n {
-                main_tape.push(TapeConstructor::Value(TapeValue::Value(MainValue::A)));
-            }
-            main_tape.push(TapeConstructor::Value(TapeValue::Value(MainValue::Hash)));
+    // match cli.command {
+    //     Commands::Run { n, m } => {
+    //         let mut main_tape = vec![TapeConstructor::Head(TapeValue::Value(MainValue::Hash))];
+    //         for _ in 0..n {
+    //             main_tape.push(TapeConstructor::Value(TapeValue::Value(MainValue::A)));
+    //         }
+    //         main_tape.push(TapeConstructor::Value(TapeValue::Value(MainValue::Hash)));
 
-            let mut aux_tape = vec![TapeConstructor::Head(TapeValue::Empty)];
-            for _ in 0..m {
-                aux_tape.push(TapeConstructor::Value(TapeValue::Value(AuxValue::A)));
-            }
-            aux_tape.push(TapeConstructor::Value(TapeValue::Empty));
+    //         let mut aux_tape = vec![TapeConstructor::Head(TapeValue::Empty)];
+    //         for _ in 0..m {
+    //             aux_tape.push(TapeConstructor::Value(TapeValue::Value(AuxValue::A)));
+    //         }
+    //         aux_tape.push(TapeConstructor::Value(TapeValue::Empty));
 
-            let mut machine = TuringMachine::new(main_tape, aux_tape);
-            println!(
-                "Result: {}\nn={n}\nm={m}\nSteps: {}\nn_m_steps: {}",
-                machine.run(),
-                machine.steps_ran(),
-                n_m_steps(n, m),
-            );
-        }
-    }
+    //         let mut machine = TuringMachine::new(main_tape, aux_tape);
+    //         println!(
+    //             "Result: {}\nn={n}\nm={m}\nSteps: {}\nn_m_steps: {}",
+    //             machine.run(),
+    //             machine.steps_ran(),
+    //             n_m_steps(n, m),
+    //         );
+    //     }
+    // }
 }

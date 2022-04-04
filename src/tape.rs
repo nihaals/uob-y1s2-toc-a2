@@ -1,4 +1,4 @@
-use std::{rc::Rc, cell::RefCell};
+use std::{cell::RefCell, rc::Rc};
 
 #[derive(PartialEq, Eq, Debug, Clone)]
 pub enum TapeValue<T: Clone> {
@@ -55,9 +55,9 @@ impl<T: Clone> Tape<T> {
         }
     }
 
-    pub fn steps_ran(&self) -> u64 {
-        *self.steps_ran.as_ref().expect("Tape must have a steps_ran").borrow()
-    }
+    // pub fn steps_ran(&self) -> u64 {
+    //     *self.steps_ran.as_ref().expect("Tape must have a steps_ran").borrow()
+    // }
 
     pub fn is_at_head(&self) -> bool {
         self.head == 0
@@ -96,6 +96,35 @@ impl<T: Clone> Tape<T> {
         self.increment_steps_ran();
 
         self.data[self.head].clone()
+    }
+
+    pub fn write(&mut self, value: TapeValue<T>) {
+        self.increment_steps_ran();
+
+        self.data[self.head] = value;
+    }
+
+    #[must_use]
+    pub fn data(&self) -> &[TapeValue<T>] {
+        &self.data
+    }
+
+    #[must_use]
+    pub fn head(&self) -> usize {
+        self.head
+    }
+
+    #[must_use]
+    pub fn as_constructor(&self) -> Vec<TapeConstructor<T>> {
+        let mut tape_constructors = Vec::new();
+        for (index, value) in self.data.iter().enumerate() {
+            if index == self.head {
+                tape_constructors.push(TapeConstructor::Head(value.clone()));
+            } else {
+                tape_constructors.push(TapeConstructor::Value(value.clone()));
+            }
+        }
+        tape_constructors
     }
 }
 
