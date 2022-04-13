@@ -55,11 +55,10 @@ mod tape;
 use machine::{AuxValue, MainValue, TuringMachine};
 use tape::{TapeConstructor, TapeValue};
 
-use clap::{AppSettings, Parser, Subcommand};
+use clap::{Parser, Subcommand};
 
 // #[derive(Parser)]
-// #[clap(author, version, about, long_about = None)]
-// #[clap(global_setting(AppSettings::PropagateVersion))]
+// #[clap(version, author, about, long_about = None)]
 // struct Cli {
 //     #[clap(subcommand)]
 //     command: Commands,
